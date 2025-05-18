@@ -226,6 +226,9 @@ def bump_version(
                 if tag:
                     update_changelog(changelog_file, f'{tag_prefix}{new_version}')
 
+                    repo.add([changelog_file])
+                    repo.commit(f'chore: update changelog file to include {tag_prefix}{new_version}')
+
         if tag:
             repo.tag(str(new_version), prefix=tag_prefix)
 
