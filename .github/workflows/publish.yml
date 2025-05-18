@@ -26,7 +26,7 @@ jobs:
     #   run: pip install setuptools==80.7.1 wheel==0.45.1 uv==0.7.5
 
     - name: Install uv
-      run: pip uv==0.7.5
+      run: pip install uv==0.7.5
 
     - name: Install build backend
       run:  uv pip install setuptools==80.7.1 wheel==0.45.1
