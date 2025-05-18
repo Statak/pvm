@@ -157,9 +157,9 @@ class VersionBumper:
     ) -> str:
         self._validate_target(target)
 
-        # current_version = self.commits.latest_version()
+        current_version = self.commits.latest_version()
         # current_version = '0.1.14-dev.1'
-        current_version = "0.1.14-alpha.10+build.1"
+        # current_version = "0.1.14-alpha.10+build.1"
         commits = self.commits.since(current_version)
         parsed = semver.Version.parse(current_version)
 
