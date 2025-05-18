@@ -1,0 +1,3 @@
+CHANGELOG.md text eol=lf
+pyproject.toml text eol=lf
+*.py text eol=lf
