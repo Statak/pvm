@@ -1,5 +1,5 @@
 [project]
-name = "pvm"
+name = "project-version-manager"
 version = "0.1.0"
 description = "Project Version Manager. A tool for bumping python project versions following SemVer 2.0.0"
 authors = [
