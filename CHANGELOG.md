@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Uncategorized
+
+- Remove environment specification from publish job in GitHub Actions workflow.
+
+## [v0.1.0] - 2025-05-19
+
 ### Added
 
 - Add GitHub Actions workflow for publishing to PyPI.
@@ -32,9 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Uncategorized
 
+- Update changelog file to include v0.1.0.
 - Bump version to v0.1.0.
 - Set up configuration management.
 - Update name in `pyproject.toml`.
 - Initial commit with project scaffold.
 
 
+
+[unreleased]: https://github.com/DazzyMlv/pvm/compare/v0.1.0...HEAD
+[v0.1.0]: https://github.com/DazzyMlv/pvm/releases/tag/v0.1.0
