@@ -9,9 +9,10 @@ permissions:
   contents: read
 
 jobs:
-  publish:
+  release:
     name: Build and Publish to PyPI
     runs-on: ubuntu-latest
+    environment: Release
 
     steps:
     - name: Checkout code
@@ -29,7 +30,7 @@ jobs:
       run: pip install uv==0.7.5
 
     - name: Install build backend
-      run:  uv pip install setuptools==80.7.1 wheel==0.45.1
+      run:  uv pip install --system setuptools==80.7.1 wheel==0.45.1
 
     - name: Build the project
       run: uv build
