@@ -1,13 +1,129 @@
 import logging
 import re
+from pathlib import Path
 from typing import Self
 
 import semver
+import tomlkit
+from configupdater import ConfigUpdater
+from ruamel.yaml import YAML
 
 from pvm import config
 from pvm.git.parser import CommitParser
 
 logger = logging.getLogger('pvm')
+
+
+class VersionSyncer:
+    def __init__(self):
+        self.yaml = YAML()
+        self.yaml.preserve_quotes = True
+        self.yaml.indent(mapping=2, sequence=4, offset=2)
+
+    def sync(self, version: str, targets: list[str]):
+        for target in targets:
+            if ':' not in target:
+                raise ValueError("Target must be in format 'file:keypath' or 'file:regex'")
+            file_path, key_path = target.split(':', 1)
+            path = Path(file_path)
+            if not path.exists():
+                raise FileNotFoundError(f'File not found: {file_path}')
+
+            suffix = path.suffix.lower()
+            if suffix == '.py':
+                self._sync_python(path, key_path.strip(), version)
+            elif suffix == '.toml':
+                self._sync_toml(path, key_path.strip(), version)
+            elif suffix in ['.json', '.yaml', '.yml']:
+                self._sync_yaml_json(path, key_path.strip(), version)
+            elif suffix == '.ini':
+                self._sync_ini(path, key_path.strip(), version)
+            elif suffix == '.md':
+                self._sync_markdown(path, key_path.strip(), version)
+            else:
+                self._sync_generic_text(path, key_path.strip(), version)
+
+    def _sync_python(self, path: Path, variable: str, version: str):
+        # self._regex_replace_in_file(path, rf"({re.escape(variable)}\s*=\s*[\"'])([^\"']+)([\"'])", rf"\1{version}\3")
+        self._regex_replace_in_file(path, rf"({re.escape(variable)}\s*=\s*[\"'])([^\"']+)([\"'])", version)
+
+    def _sync_toml(self, path: Path, key_path: str, version: str):
+        doc = tomlkit.parse(path.read_text())
+        keys = key_path.split('.')
+        ref = doc
+        for key in keys[:-1]:
+            if key not in ref or not isinstance(ref[key], dict):  # type: ignore
+                raise KeyError(f"Key path '{key_path}' not found in {path}")
+            ref = ref[key]  # type: ignore
+        ref[keys[-1]] = tomlkit.string(version)  # type: ignore
+        path.write_text(tomlkit.dumps(doc))
+
+    def _sync_yaml_json(self, path: Path, key_path: str, version: str):
+        with open(path, encoding='utf-8') as f:
+            data = self.yaml.load(f)
+        keys = key_path.split('.')
+        ref = data
+        for key in keys[:-1]:
+            if key not in ref or not isinstance(ref[key], dict):
+                raise KeyError(f"Key path '{key_path}' not found in {path}")
+            ref = ref[key]
+        ref[keys[-1]] = version
+        with open(path, 'w', encoding='utf-8') as f:
+            self.yaml.dump(data, f)
+
+    def _sync_ini(self, path: Path, key_path: str, version: str):
+        section_key = key_path.split('.')
+        if len(section_key) != 2:
+            raise ValueError('INI target must be in format section.key')
+        section, key = section_key
+        updater = ConfigUpdater()
+        updater.read(path)
+        if not updater.has_section(section) or not updater[section].has_option(key):
+            raise KeyError(f"INI key '{key_path}' not found in {path}")
+        updater[section][key].value = version
+        # updater.update_file(path)
+        updater.update_file()
+
+    def _sync_markdown(self, path: Path, key: str, version: str):
+        # Looks for lines like: "Version: x.y.z"
+        pattern = rf'({re.escape(key)}\s*[:=]\s*)([\w\.\-\+]+)'
+        replacement = rf'\1{version}'
+        self._regex_replace_in_file(path, pattern, replacement)
+
+    def _sync_generic_text(self, path: Path, pattern: str, version: str):
+        r"""Replace the version string in a generic text file using a regex pattern.
+
+        pattern: A regex pattern that captures the version in a group. For example:
+                r'(__version__\s*=\s*[\'"])([^\'"]+)([\'"])'
+        """
+        content = path.read_text()
+        regex = re.compile(pattern)
+        if not regex.search(content):
+            raise ValueError(f'Pattern not found in {path}')
+        new_content = regex.sub(rf'\1{version}\3', content)
+        path.write_text(new_content)
+
+    # def _regex_replace_in_file(self, path: Path, pattern: str, replacement: str):
+    #     content = path.read_text()
+    #     regex = re.compile(pattern)
+    #     if not regex.search(content):
+    #         raise ValueError(f"Pattern not found in {path}")
+    #     new_content = regex.sub(replacement, content)
+    #     path.write_text(new_content)
+    def _regex_replace_in_file(self, path: Path, pattern: str, version: str):
+        content = path.read_text()
+        regex = re.compile(pattern)
+
+        if not regex.search(content):
+            raise ValueError(f'Pattern not found in {path}')
+
+        def replacer(match):
+            # Replace only the captured group (typically group 2 is the version)
+            groups = match.groups()
+            return f'{groups[0]}{version}{groups[2]}'
+
+        new_content = regex.sub(replacer, content)
+        path.write_text(new_content)
 
 
 class VersionBumper:
