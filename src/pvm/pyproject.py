@@ -12,8 +12,14 @@ logger = logging.getLogger('pvm')
 
 
 class PyProject:
-    def __init__(self: Self, pyproject_path: str | Path = Path('pyproject.toml')):
+    def __init__(self: Self, pyproject_path: str | Path | None = None):
+        if pyproject_path is None:
+            pyproject_path = Path.cwd() / 'pyproject.toml'
         self.pyproject_path = Path(pyproject_path)
+
+        if not self.pyproject_path.exists():
+            raise FileNotFoundError(f"pyproject.toml not found at: {self.pyproject_path}")
+
         self.toml_file = TOMLFile(str(self.pyproject_path))
         self.document: TOMLDocument | None = None
         self.version: semver.Version | None = None
