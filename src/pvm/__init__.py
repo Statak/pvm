@@ -1,1 +1,1 @@
-__version__ = "0.1.0"  # Version Var
+__version__ = "0.1.1"  # Version Var
