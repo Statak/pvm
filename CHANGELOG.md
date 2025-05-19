@@ -7,8 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.1] - 2025-05-19
+
+### Added
+
+- Add GitHub Actions workflow for publishing to PyPI.
+
+### Fixed
+
+- Update project name to 'project-version-manager' in pyproject.toml.
+- Correct pip command for installing uv package.
+
 ### Uncategorized
 
+- Bump version to v0.1.1.
+- Revert version to 0.1.0 in pyproject.toml and __init__.py.
+- Merge branch 'hotfix/pyproject-path' into develop.
+- Update uv.lock file.
+- Integrate VersionSyncer for synchronizing version across specified files.
+- Implement VersionSyncer for synchronizing version across multiple file formats.
+- Improve error handling and add version-files retrieval in config loading.
+- Update dependencies and improve project configuration.
+- Bump version to v0.1.1-dev.1.
+- Load pyproject.toml relative to user’s working directory.
+- Resolve pyproject.toml path from current working directory.
+- Add environment specification for publish job in GitHub Actions workflow.
+- Automate changelog update and commit after version bump.
+- Reorganize changelog structure and update entries for clarity.
 - Remove environment specification from publish job in GitHub Actions workflow.
 
 ## [v0.1.0] - 2025-05-19
@@ -46,5 +71,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-[unreleased]: https://github.com/DazzyMlv/pvm/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/DazzyMlv/pvm/compare/v0.1.1...HEAD
+[v0.1.1]: https://github.com/DazzyMlv/pvm/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/DazzyMlv/pvm/releases/tag/v0.1.0
