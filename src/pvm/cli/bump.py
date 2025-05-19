@@ -1,4 +1,5 @@
 import textwrap
+from pathlib import Path
 from typing import Annotated
 
 import semver
@@ -8,8 +9,7 @@ from pvm import config
 from pvm.changelog.utils import update_changelog
 from pvm.cli.changelog import handle_project_changelog
 from pvm.git import repo
-from pvm.pyproject import PyProject
-from pvm.version import VersionBumper
+from pvm.version import VersionBumper, VersionSyncer
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -194,7 +194,6 @@ def bump_version(
         validate_tag_prefix(tag_prefix)
 
     try:
-        pyproject = PyProject()
         bumper = VersionBumper()
         old_version = bumper.commits.latest_version()
         new_version = semver.Version.parse(
@@ -212,13 +211,32 @@ def bump_version(
             message = f'New version is the same as the current version: {old_version}'
             raise ValueError(message)
 
-        # print(f'OUTPUT: {new_version}')
-        # raise typer.Exit(1)
+        version_files: list[str] | None = config.get('version-files')
 
-        pyproject.bump(str(new_version))
+        if version_files:
+            syncer = VersionSyncer()
+            syncer.sync(
+                version=str(new_version),
+                targets=version_files
+            )
 
         if tag:
-            commit_version_change(str(new_version), tag_prefix)
+            tag_name = f'{tag_prefix}{new_version}'
+            typer.echo(f'[i] Committing version change to {tag_name}')
+            if version_files:
+                files = []
+                for target in version_files:
+                    if ':' not in target:
+                        raise ValueError("Target must be in format 'file:keypath' or 'file:regex'")
+                    file_path, _ = target.split(':', 1)
+                    path = Path(file_path)
+                    if not path.exists():
+                        raise FileNotFoundError(f'File not found: {file_path}')
+                    files.append(path)
+
+                if files:
+                    repo.add(files)
+                    repo.commit(f'chore: bump version to {tag_name}')
 
         if changelog:
             if changelog_file:
@@ -256,10 +274,3 @@ def validate_tag_prefix(tag_prefix: str):
             err=True,
         )
         raise typer.Exit(1)
-
-
-def commit_version_change(new_version: str, tag_prefix: str):
-    tag_name = f'{tag_prefix}{new_version}'
-    typer.echo(f'[i] Committing version change to {tag_name}')
-    repo.add(['pyproject.toml'])
-    repo.commit(f'chore: bump version to {tag_name}')
