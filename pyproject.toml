@@ -1,6 +1,6 @@
 [project]
 name = "project-version-manager"
-version = "0.1.0"
+version = "0.1.1-dev.1"
 description = "Project Version Manager. A tool for bumping python project versions following SemVer 2.0.0"
 authors = [
     { name = "Malvin Ndip", email = "23006212+DazzyMlv@users.noreply.github.com" },
@@ -42,8 +42,11 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
+    "configupdater>=3.2",
     "gitpython>=3.1.44",
+    "jinja2>=3.1.6",
     "packaging>=25.0",
+    "ruamel-yaml>=0.18.10",
     "semver>=3.0.0",
     "tomlkit>=0.13.2",
     "typer>=0.15.3",
@@ -69,7 +72,7 @@ dev = [
     "mypy>=1.15.0",
     "pre-commit-hooks>=5.0.0",
     "pre-commit>=4.2.0",
-    "pvm",
+    "project-version-manager",
     "pytest-asyncio>=0.26.0",
     "ruff>=0.11.8",
     "twine>=6.1.0",
@@ -94,8 +97,8 @@ format = {cmd = "uv run ruff format . && uv run ruff check --fix --exit-zero && 
 [tool.uv]
 package = true
 
-[tool.uv.sources.pvm]
-workspace = true
+[tool.uv.sources]
+project-version-manager = { workspace = true }
 
 [[tool.uv.index]]
 name = "pypi"
@@ -108,6 +111,19 @@ name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
+
+[tool.pvm]
+version-files = [
+    "pyproject.toml:project.version",
+    "src/pvm/__init__.py:__version__",
+    # "config.json:app.version",
+    # "settings.yaml:meta.version",
+    # "docs/README.md:Version",
+    # "setup.cfg:metadata.version",                # INI format
+    # "your_package/__init__.py:__version__\\s*=\\s*[\"']([^\"']+)[\"']",
+    # "README.md:Version[:=]\\s*([\\w\\.\\-\\+]+)",
+    # "notes.txt:AppVersion\\s*=\\s*['\"]([^'\"]+)['\"]"
+]
 
 [tool.tox]
 minversion = "4.25.0"
