@@ -11,14 +11,24 @@ log = logging.getLogger('pvm')
 
 
 def load_config_from_pyproject() -> dict:
-    pyproject_path = pathlib.Path('pyproject.toml')
+    """Load the PVM tool config from pyproject.toml, if it exists in the user's working directory.
+
+    Returns an empty dictionary if the file or expected section does not exist.
+    """
+    pyproject_path = pathlib.Path.cwd() / 'pyproject.toml'
+
     if not pyproject_path.is_file():
         return {}
 
-    with pyproject_path.open('rb') as f:
-        pyproject_data = tomllib.load(f)
+    try:
+        with pyproject_path.open('rb') as f:
+            pyproject_data = tomllib.load(f)
 
-    return pyproject_data.get('tool', {}).get('pvm', {})
+        return pyproject_data.get('tool', {}).get('pvm', {})
+    except Exception as e:
+        # Optional: log or handle parsing errors
+        log.exception(f"Failed to load pyproject.toml: {e}")
+        return {}
 
 
 def _get_changelog_file(default: Any) -> str:
