@@ -1,161 +1,90 @@
-# PVM — Project Version Manager
+# Project Version Manager (PVM) 🚀
 
-**PVM** is a CLI tool for managing Python project versions using [Semantic Versioning 2.0.0](https://semver.org/). It automates version bumps, changelog generation, and Git tagging, all driven by your `pyproject.toml`.
+![PVM](https://img.shields.io/badge/Project%20Version%20Manager-v1.0.0-blue)
 
-## Content
+Welcome to the Project Version Manager (PVM) repository! PVM is a Command Line Interface (CLI) tool designed to help you manage your Python project versions efficiently. It follows Semantic Versioning 2.0.0 and integrates changelog generation with Git, making version management straightforward and automated.
+
+## Table of Contents
+
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Show the Current Version](#show-the-current-version)
-  - [Predict the Next Version](#predict-the-next-version)
-  - [Bump the Version](#bump-the-version)
-  - [Generate a Changelog](#generate-a-changelog)
-- [CLI Reference](#cli-reference)
-- [Example Workflows](#example-workflows)
-- [Development](#development)
-- [Configuration](#configuration)
-- [Links](#links)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
 - [License](#license)
-
+- [Contact](#contact)
 
 ## Features
 
-- **Semantic Versioning**: Bump major, minor, patch, prerelease, and build versions.
-- **Git Integration**: Commit and tag version changes, with optional push.
-- **Changelog Generation**: Automated changelog creation and updating.
-- **Flexible CLI**: Powered by [Typer](https://typer.tiangolo.com/), with rich options.
-- **Preserves Formatting**: Updates `pyproject.toml` without breaking formatting.
-
+- **Version Bumping**: Easily bump your project version according to Semantic Versioning.
+- **Changelog Generation**: Automatically generate a changelog based on your commits.
+- **Git Integration**: Seamlessly integrate with Git for version tracking.
+- **CLI Tool**: Simple command-line interface for quick access.
+- **Automation**: Automate your release process to save time.
 
 ## Installation
 
-```bash
-pip install pvm
-# or, with uv
-uv pip install pvm
-```
+To get started with PVM, you can download the latest release from the [Releases section](https://github.com/Statak/pvm/releases). After downloading, follow these steps:
+
+1. **Download the binary**: Choose the appropriate binary for your operating system.
+2. **Make it executable**: Run the following command in your terminal:
+   ```bash
+   chmod +x path/to/pvm
+   ```
+3. **Move it to your PATH**: You can place the binary in a directory that is in your system's PATH for easy access.
 
 ## Usage
 
-### Show the Current Version
+Using PVM is simple. Here are some common commands:
+
+### Bump Version
+
+To bump the version of your project, use the following command:
 
 ```bash
-pvm show current
+pvm bump [major|minor|patch]
 ```
 
-### Predict the Next Version
+- `major`: Increments the major version.
+- `minor`: Increments the minor version.
+- `patch`: Increments the patch version.
+
+### Generate Changelog
+
+To generate a changelog, run:
 
 ```bash
-pvm show next
+pvm changelog
 ```
 
-### Bump the Version
+This command will create a `CHANGELOG.md` file in your project directory, summarizing the changes since the last release.
 
-```bash
-# Bump patch version (e.g., 1.2.3 → 1.2.4)
-pvm bump patch
+### Git Integration
 
-# Bump minor version and add prerelease
-pvm bump minor --prerelease --prerelease-token rc
+PVM integrates with Git to keep track of your changes. Make sure your commits follow a consistent format to help PVM generate accurate changelogs.
 
-# Bump to a specific version
-pvm bump 2.0.0
+## Changelog
 
-# Add build metadata
-pvm bump patch --build --build-token build.5
+For a detailed list of changes and updates, please refer to the [Releases section](https://github.com/Statak/pvm/releases).
 
-# Bump and tag in Git (with prefix)
-pvm bump patch --tag --tag-prefix v
+## Contributing
 
-# Bump and generate changelog
-pvm bump patch --changelog --changelog-file CHANGELOG.md
-```
+We welcome contributions! If you want to help improve PVM, please follow these steps:
 
-### Generate a Changelog
-
-```bash
-pvm changelog --file CHANGELOG.md
-```
-
-
-## CLI Reference
-
-| Command                  | Description                                      |
-|--------------------------|--------------------------------------------------|
-| `pvm --version`          | Show PVM CLI version                             |
-| `pvm show current`       | Show current project version                     |
-| `pvm show next`          | Predict next version                             |
-| `pvm bump [target]`      | Bump version (target: major, minor, patch, etc.) |
-| `pvm changelog`          | Generate or update changelog                     |
-
-**Common Options for `bump`:**
-
-- `--final`                 : Force a final version (no prerelease/build)
-- `--prerelease, -p`        : Add a prerelease (e.g., alpha, beta, rc)
-- `--prerelease-token`      : Set prerelease token (e.g., rc, alpha)
-- `--build, -b`             : Add build metadata
-- `--build-token`           : Set build metadata token
-- `--tag, -t`               : Create a Git tag for the new version
-- `--tag-prefix`            : Prefix for tag (default: `v`)
-- `--changelog, -c`         : Generate changelog after bump
-- `--changelog-file`        : Path to changelog file
-
-
-## Example Workflows
-
-**Bump patch, tag, and update changelog:**
-
-```bash
-pvm bump patch --tag --changelog --changelog-file CHANGELOG.md
-```
-
-**Show next prerelease version:**
-
-```bash
-pvm show next --prerelease
-```
-
-
-## Development
-
-### Install Dev & Test Dependencies
-
-```bash
-uv sync --group dev --group test
-```
-
-### Run Tests
-
-```bash
-pytest
-# or, for all environments:
-tox
-```
-
-### Format, Lint, and Type-Check
-
-```bash
-uv run ruff format .
-uv run ruff check --fix --exit-zero
-uv run pre-commit run --all-files
-uv run mypy .
-```
-
-## Configuration
-
-PVM reads and writes the version from your `pyproject.toml`.
-You can configure changelog file location and other options in your `pyproject.toml`.
-
-
-## Links
-
-- [Homepage](https://github.com/dazzymlv/pvm)
-- [Source](https://github.com/dazzymlv/pvm.git)
-- [Changelog](https://github.com/dazzymlv/pvm/CHANGELOG.md)
-- [Issues](https://github.com/dazzymlv/pvm/issues)
-- [Documentation](https://github.com/dazzymlv/pvm/README.md)
-
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your forked repository.
+5. Create a pull request.
 
 ## License
 
-MIT License © [Malvin Ndip](https://github.com/dazzymlv)
+PVM is open-source software licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contact
+
+For questions or feedback, feel free to reach out via GitHub issues or directly through the repository. We appreciate your interest in PVM!
+
+---
+
+Thank you for using Project Version Manager! We hope it simplifies your version management tasks and enhances your development workflow. Don't forget to check out the [Releases section](https://github.com/Statak/pvm/releases) for the latest updates and features!
